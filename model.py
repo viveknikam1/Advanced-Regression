@@ -8,13 +8,19 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 df_train = pd.read_csv('../train.csv')
-#Find useless columns --- if Non-null>1200 keep else delete column
-#find categorical features and non-cat features
-# delete categorical features whode unique values>8
-#fillna non-cat columns using mean/mode/median
-#fillna cat columns using mode/median
-#create dummy columns from cat-columns
-#create final dataframe for train
-#create model-Random forest/xgboost
-#create dataframe as per submission file and submit to kaggle
-#post your score to CodeNautics DSML group.
+#Threshold for useless columns due to na values=300
+ser = df_train.isna().sum()
+useless_columns = list(ser[ser>300].index)
+selected_columns = list(df_train.columns)
+for col in useless_columns:
+    selected_columns.remove(col)
+selected_cat = []
+selected_non_cat = []
+for col in selected_columns:
+    if df_train[col].dtype =='O':
+        selected_cat.append(col)
+    else:
+        selected_non_cat.append(col)
+y = 'SalePrice'
+selected_columns.remove(y)
+selected_non_cat.remove(y)
